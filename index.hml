@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EKHOLABORATORY</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            min-height: 100vh;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+        }
+
+        .background-blur {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 25%;
+            left: 5%;
+            background-image: url('https://raw.githubusercontent.com/SimoniFK01/EKHOLAB1/c5cef700d49b30fe9fb344e152132518540c0e1b/black_logo_bg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(50px);
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .vertical-text {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%) rotate(180deg);
+            writing-mode: vertical-rl;
+            font-size: 120px;
+            font-weight: bold;
+            color: rgba(129, 129, 129, 0.696);
+            letter-spacing: 5px;
+            z-index: 1;
+            width: 15%;
+            text-align: center;
+        }
+
+        .main-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            padding: 48px 24px;
+            z-index: 2;
+            align-items: center;
+        }
+
+        .image-section {
+            width: 15%;
+            padding-right: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .image-container {
+            width: 100%;
+            position: relative;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        .cards-section {
+            width: 70%;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, auto);
+            gap: 24px;
+            width: 100%;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .play-area {
+            cursor: pointer;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .play-area:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .play-icon {
+            width: 48px;
+            height: 48px;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .playing .play-icon {
+            opacity: 1;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .card-description {
+            color: #808080;
+            margin-bottom: 16px;
+            font-size: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .social-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: #fff;
+        }
+
+        .social-icon {
+            width: 22px;
+            height: 22px;
+        }
+
+
+        .custom-beat-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding:24px;
+        }
+
+        .custom-beat-card:hover {
+            /*border-color: rgba(255, 255, 255, 0.6);*/
+            border-color: rgba(255, 0, 0, 0.633);
+
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .custom-beat-card .play-area {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .custom-beat-card .play-area:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        @media (max-width: 1400px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+                padding: 32px 24px;
+            }
+            .image-section {
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 32px;
+            }
+            .image-container {
+                max-width: 250px;
+                margin: 0 auto;
+            }
+            .cards-section {
+                width: 100%;
+                padding: 0;
+            }
+            .vertical-text {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-blur"></div>
+    
+    <div class="main-container">
+        <section class="image-section">
+            <div class="image-container">
+                <img src='https://raw.githubusercontent.com/SimoniFK01/EKHOLAB1/0cc2747b47fe2a42378031d71bcf5c3225bd2453/kymeralogo.jpg' alt="00KYMERA Logo">
+            </div>
+        </section>
+
+        <section class="cards-section">
+            <div class="grid">
+                <!-- Beat cards will be dynamically inserted here -->
+            </div>
+        </section>
+    </div>
+
+    <div class="vertical-text">00KYMERA</div>
+
+    <script>
+        const beats = [
+        { 
+            id: 1, 
+            title: "&ND GROW", 
+            description: "#Nettspend, #KenCarson, #DestroyLonely", 
+            audioUrl: "https://raw.githubusercontent.com/SimoniFK01/EKHOLAB1/c5cef700d49b30fe9fb344e152132518540c0e1b/%26.mp3",
+            whatsappUrl: "https://wa.me/5551997299435?text=Quero%20adquirir%20o%20beat%20%22%26ND%20GROW%22.%20" // Substitua pelo link real do WhatsApp
+        },
+        { 
+            id: 2, 
+            title: "FCK LIAR", 
+            description: "#KenCarson, #KayAngel", 
+            audioUrl: "https://raw.githubusercontent.com/SimoniFK01/EKHOLAB1/d439e8758e0a2aa1ef96229ad64b53de57993f49/LIAR%20(mp3cut.net).mp3",
+            whatsappUrl: "https://wa.me/5551997299435?text=Quero%20adquirir%20o%20beat%20%22FCK%20LIAR%22." // Substitua pelo link real do WhatsApp
+        },
+        {
+            id: 3, 
+            title: "DEMON ROSE", 
+            description: "#Rage, #Dark, #Destroy Lonely", 
+            audioUrl: "https://raw.githubusercontent.com/SimoniFK01/EKHOLAB1/d439e8758e0a2aa1ef96229ad64b53de57993f49/DEMON%20ROSE%20(mp3cut.net).mp3",
+            whatsappUrl: "https://wa.me/5551997299435?text=Quero%20adquirir%20o%20beat%20%22DEMON%20ROSE%22." // Substitua pelo link real do WhatsApp
+        },
+        {
+            id: 4, 
+            title: "U POISON", 
+            description: "#9mice, #Bones", 
+            audioUrl: "https://raw.githubusercontent.com/SimoniFK01/EKHOLAB1/d439e8758e0a2aa1ef96229ad64b53de57993f49/UPOISON%20(mp3cut.net).mp3",
+            whatsappUrl: "https://wa.me/5551997299435?text=Quero%20adquirir%20o%20beat%20%22U%20POISON%22." // Substitua pelo link real do WhatsApp
+        },
+        {
+            id: 5, 
+            title: "WINTER 4E", 
+            description: "#UnoTheActivist #KenCarson #Rage", 
+            audioUrl: "https://raw.githubusercontent.com/SimoniFK01/EKHOLAB1/d439e8758e0a2aa1ef96229ad64b53de57993f49/winter%20(mp3cut.net).mp3",
+            whatsappUrl: "https://wa.me/5551997299435?text=Quero%20adquirir%20o%20beat%20%22WINTER%204E%22.." // Substitua pelo link real do WhatsApp
+        }
+        ];
+
+        let currentlyPlaying = null;
+
+        function createBeatCard(beat) {
+            return `
+                <div class="card" id="card-${beat.id}">
+                    <div class="play-area" onclick="togglePlay(${beat.id})">
+                        <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 2L18 12L6 22V2Z"></path>
+                        </svg>
+                        <audio id="audio-${beat.id}" src="${beat.audioUrl}"></audio>
+                    </div>
+                    <h3 class="card-title">${beat.title}</h3>
+                    <p class="card-description">${beat.description}</p>
+                    <div class="social-links">
+                        <a href="${beat.whatsappUrl}" target="_blank" class="social-link">
+                            <img src="https://raw.githubusercontent.com/SimoniFK01/EKHOLAB1/b8c4d42560eb01910cd8c92e9686380d7bbc3aac/wppicon.png" alt="WhatsApp" class="social-icon">
+                        </a>
+
+                        <a href="https://www.instagram.com/00kymera" target="_blank" class="social-link">
+                            <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createCustomBeatCard() {
+            return `
+                <div class="card custom-beat-card">
+                    <div class="play-area">
+                        <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <line x1="19" y1="8" x2="19" y2="14"></line>
+                            <line x1="22" y1="11" x2="16" y2="11"></line>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Personalizado</h3>
+                    <p class="card-description">Criação exclusiva para seu projeto (BEAT/MIX)</p>
+                    <div class="social-links">
+                        <a href="https://wa.me/5551997299435?text=Quero%20adquirir%20um%20beat%20exclusivo%20ou%20um%20trabalho%20de%20Mix%2FMaster." target="_blank" class="social-link">
+                            <img src="https://raw.githubusercontent.com/SimoniFK01/EKHOLAB1/b8c4d42560eb01910cd8c92e9686380d7bbc3aac/wppicon.png" alt="WhatsApp" class="social-icon">
+                        </a>
+                        <a href="https://www.instagram.com/00kymera" target="_blank" class="social-link">
+                            <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function togglePlay(beatId) {
+            const audio = document.getElementById(`audio-${beatId}`);
+            const card = document.getElementById(`card-${beatId}`);
+
+            if (currentlyPlaying && currentlyPlaying !== audio) {
+                currentlyPlaying.pause();
+                currentlyPlaying.parentElement.classList.remove("playing");
+            }
+
+            if (audio.paused) {
+                audio.play();
+                card.classList.add("playing");
+                currentlyPlaying = audio;
+            } else {
+                audio.pause();
+                card.classList.remove("playing");
+                currentlyPlaying = null;
+            }
+        }
+
+        // Initialize the grid
+        const grid = document.querySelector('.grid');
+        beats.forEach(beat => {
+            grid.innerHTML += createBeatCard(beat);
+        });
+        grid.innerHTML += createCustomBeatCard();
+    </script>
+</body>
+</html>
